@@ -1,0 +1,30 @@
+Anchor:
+  WindowsBuildOption: &WindowsOption
+    locationPathName: Builds/windows/windows.exe
+    target: StandaloneWindows
+    targetGroup: Standalone
+  PlayerSettings:
+    bundleVersion: &bundleVersion "0.2"
+Targets:
+- Name: default
+  BuildPlayerOptions:
+    <<: *WindowsOption
+  ScriptingDefineSymbols:
+  - DEFINE_A
+  - DEFINE_B
+- Name: windows
+  BuildPlayerOptions:
+    <<: *WindowsOption
+- Name: android-dev
+  BuildPlayerOptions:
+    locationPathName: Builds/android/android.apk
+    target: Android
+    targetGroup: Android
+    options:
+    - IL2CPP
+    - Development
+  StaticProperties:
+    PlayerSettings:
+      bundleVersion: *bundleVersion
+      keystorePass: "my-password"
+      keyaliasPass: "my-password"

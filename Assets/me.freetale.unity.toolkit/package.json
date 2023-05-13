@@ -1,0 +1,26 @@
+{
+  "name": "me.freetale.unity.toolkit",
+  "version": "0.1.0",
+  "description": "Library for Unity3D all in one",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freetale/me.freetale.unity.toolkit.git"
+  },
+  "keywords": [
+    "unity3d",
+    "builder",
+    "ci",
+    "upm",
+    "unity-package-manager"
+  ],
+  "author": "FreeTale",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/freetale/me.freetale.unity.toolkit/issues"
+  },
+  "homepage": "https://github.com/freetale/me.freetale.unity.toolkit#readme"
+}

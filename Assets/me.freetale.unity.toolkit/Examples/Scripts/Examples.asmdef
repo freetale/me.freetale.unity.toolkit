@@ -1,7 +1,9 @@
 {
-    "name": "me.freetale.unity.toolkit",
-    "rootNamespace": "FreeTale.Unity.Toolkit",
-    "references": [],
+    "name": "Examples",
+    "rootNamespace": "FreeTale.Unity.Toolkit.Examples",
+    "references": [
+        "GUID:096e630287ae3e64996cf324e9640f8c"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

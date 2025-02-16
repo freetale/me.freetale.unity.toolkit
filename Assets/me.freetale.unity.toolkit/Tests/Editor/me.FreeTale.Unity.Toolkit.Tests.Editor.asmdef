@@ -1,5 +1,5 @@
 {
-    "name": "Editor",
+    "name": "FreeTale.Unity.Toolkit.Tests.Editor",
     "rootNamespace": "FreeTale.Unity.Toolkit.Tests.Editor",
     "references": [
         "UnityEngine.TestRunner",

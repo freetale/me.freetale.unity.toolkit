@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace FreeTale.Unity.Toolkit
@@ -12,10 +14,18 @@ namespace FreeTale.Unity.Toolkit
         protected StateGuardException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
-    public interface IManager<T> where T : IState
+    public interface IStateManagerHook<TState, TName> where TState : IState<TName> where TName : Enum
+    {
+        void PreExit(IStateManager<TState, TName> manager, IState<TName> from, IState<TName> to);
+        void PostExit(IStateManager<TState, TName> manager, IState<TName> from, IState<TName> to);
+        void PreEnter(IStateManager<TState, TName> manager, IState<TName> from, IState<TName> to);
+        void PostEnter(IStateManager<TState, TName> manager, IState<TName> from, IState<TName> to);
+    }
+    public interface IStateManager<TState, TName> where TState : IState<TName> where TName : Enum
     {
         bool StateGuard { get; set; }
-        T CurrentState { get; set; }
+        List<IStateManagerHook<TState, TName>> Hooks { get; }
+        TState CurrentState { get; set; }
         void Tick();
     }
 
@@ -25,19 +35,30 @@ namespace FreeTale.Unity.Toolkit
         void Tick();
         void Exit();
     }
+    public interface IState<TName>: IState where TName : Enum
+    {
+        TName Name { get; }
+    }
 
     public static class IFSMExtension
     {
-        public static void NextState<T>(this IManager<T> manager, T state) where T : IState
+        public static void NextState<TState, TName>(this IStateManager<TState, TName> manager, TState to) 
+            where TState : IState<TName> 
+            where TName : Enum
         {
             if (manager.StateGuard)
             {
                 throw new StateGuardException();
             }
+            var from = manager.CurrentState;
             manager.StateGuard = true;
-            manager.CurrentState.Exit();
-            manager.CurrentState = state;
-            manager.CurrentState.Enter();
+            manager.Hooks.ForEach(hook => { hook.PreExit(manager, from, to); });
+            from.Exit();
+            manager.Hooks.ForEach(hook => { hook.PostExit(manager, from, to); });
+            manager.CurrentState = to;
+            manager.Hooks.ForEach(hook => { hook.PreEnter(manager, from, to); });
+            to.Enter();
+            manager.Hooks.ForEach(hook => { hook.PostEnter(manager, from, to); });
             manager.StateGuard = false;
         }
     }

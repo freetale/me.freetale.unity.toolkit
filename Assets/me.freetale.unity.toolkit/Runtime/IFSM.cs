@@ -5,12 +5,12 @@ using System.Runtime.Serialization;
 namespace FreeTale.Unity.Toolkit
 {
 
-    [System.Serializable]
-    public class StateGuardException : System.Exception
+    [Serializable]
+    public class StateGuardException : Exception
     {
         public StateGuardException() { }
         public StateGuardException(string message) : base(message) { }
-        public StateGuardException(string message, System.Exception inner) : base(message, inner) { }
+        public StateGuardException(string message, Exception inner) : base(message, inner) { }
         protected StateGuardException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -42,6 +42,23 @@ namespace FreeTale.Unity.Toolkit
 
     public static class IFSMExtension
     {
+        /// <summary>
+        /// ensure current state is target state
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>target state</returns>
+        /// <exception cref="InvalidOperationException">when not in target state</exception>
+        public static TState At<TState, TName>(this IStateManager<TState, TName> manager, TState target)
+            where TState : IState<TName>
+            where TName : Enum
+        {
+            if (!ReferenceEquals(manager.CurrentState, target))
+            {
+                throw new InvalidOperationException("state not at target state");
+            }
+            return target;
+        }
+
         public static void NextState<TState, TName>(this IStateManager<TState, TName> manager, TState to) 
             where TState : IState<TName> 
             where TName : Enum
